@@ -117,12 +117,12 @@
 
         async function enviarExamen() {
             let aciertos = 0;
-            let contestadas completas = true;
+            let contestadasCompletas = true;
 
             for(let i=0; i<examenAlumno.length; i++) {
                 const seleccionada = document.querySelector(`input[name="preg${i}"]:checked`);
                 if(!seleccionada) {
-                    contestadas completas = false;
+                    contestadasCompletas = false;
                     break;
                 }
                 if(seleccionada.value === examenAlumno[i].r) {
@@ -130,7 +130,7 @@
                 }
             }
 
-            if(!contestadas completas) {
+            if(!contestadasCompletas) {
                 return alert("Por favor, contesta todas las preguntas antes de enviar.");
             }
 
