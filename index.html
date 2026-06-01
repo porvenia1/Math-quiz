@@ -110,7 +110,7 @@
             document.getElementById('cuestionario').style.display = 'block';
             
             // 1. MEZCLA LAS 35 PREGUNTAS Y SELECCIONA SOLO 10 AL AZAR
-            examenAlumno = bancoREALEZA.sort(() => 0.5 - Math.random()).slice(0, 10);
+            examenAlumno = bancoREALEZA.sort(() => 0.5 - Math.random()).slice(0, 25);
             
             const lista = document.getElementById('lista-preguntas');
             lista.innerHTML = "";
