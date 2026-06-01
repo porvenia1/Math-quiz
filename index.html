@@ -12,7 +12,7 @@
         label { display: block; font-weight: bold; margin-bottom: 5px; color: #555; }
         input[type="text"], select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
         .pregunta { background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid #2c3e50; }
-        .pregunta p { margin-top: 0; font-weight: 600; font-size: 16px; }
+        .pregunta p { margin-top: 0; font-weight: 600; font-size: 16px; white-space: pre-line; }
         .opcion { display: block; padding: 10px; margin: 8px 0; background: white; border: 1px solid #e0e0e0; border-radius: 6px; cursor: pointer; transition: 0.2s; }
         .opcion:hover { background: #eef2f7; border-color: #bdc3c7; }
         .opcion input { margin-right: 10px; }
@@ -57,30 +57,46 @@
     </div>
 
     <script>
-        // PEGA AQUÍ LA URL QUE COPIASTE EN EL PASO 1 EN MEDIO DE LAS COMILLAS
-        const URL_GOOGLE_SCRIPT = "https://script.google.com/macros/s/AKfycbzB4KKXSnFQnbFxGt-Kyx2RAk9828svF0Ib96n56X-FoIxS7fbDB9FeE-Re4WiDCa4Z/exec";
+        // PEGA AQUÍ TU URL DE GOOGLE APPS SCRIPT MANTENIENDO LAS COMILLAS
+        const URL_GOOGLE_SCRIPT = "https://github.com/porvenia1/Math-quiz.git";
 
+        // Banco completo con los 35 ejercicios extraídos de tu PDF de práctica
         const bancoREALEZA = [
-            { p: "Un día de enero, la temperatura fue de 0°. Al cabo de 7 días aumentó 5°. Diez días después disminuyó 8°. ¿Qué entero representa la temperatura final?", o: ["-8", "-3", "3", "13"], r: "-3" },
-            { p: "En la ecuación a² * a^? = a⁶, ¿con qué número se tiene que rellenar el espacio para que sea verdadera?", o: ["3", "4", "6", "8"], r: "4" },
+            { p: "Un día de enero, la temperatura en Alaska fue de 0 grados. Al cabo de 7 días aumentó 5 grados. Diez días después disminuyó 8 grados debido a un frente frío. ¿Cuál entero representa mejor la temperatura después del frente frío?", o: ["-8", "-3", "3", "13"], r: "-3" },
+            { p: "En la ecuación (a²)(a^?) = a⁶ ¿con qué número se tiene que rellenar el espacio de tal manera que la ecuación sea verdadera?", o: ["3", "4", "6", "8"], r: "4" },
             { p: "¿Cuál es el valor de la expresión (-3)³?", o: ["81", "27", "-9", "-27"], r: "-27" },
             { p: "Si 2/3 < k < 4/5, ¿cuál de los siguientes es un posible valor para k?", o: ["0.660", "0.665", "0.666", "0.667"], r: "0.667" },
             { p: "¿Cuál es el resultado de -9 - (-3) - 8?", o: ["-20", "-14", "4", "14"], r: "-14" },
-            { p: "La matrícula de una universidad se duplica cada hora. Si a las 5:00 a.m. había 4 estudiantes, ¿cuántos había a las 8:00 a.m.?", o: ["12", "16", "32", "64"], r: "32" },
-            { p: "Si k representa la edad de Julio en años, ¿qué representa k - 3?", o: ["Edad en 3 años", "Edad hace 3 años", "Triple de su edad", "Un tercio de su edad"], r: "Edad hace 3 años" },
+            { p: "La matrícula de una universidad se duplica cada hora. Si a las 5:00 a.m. había 4 estudiantes, ¿cuántos estudiantes había a las 8:00 a.m.?", o: ["12", "16", "32", "64"], r: "32" },
+            { p: "Si k representa la edad de Julio en años, ¿qué representa k - 3?", o: ["La edad de Julio dentro de 3 años", "La edad de Julio hace 3 años", "Tres veces la edad de Julio", "Un tercio de la edad de Julio"], r: "La edad de Julio hace 3 años" },
             { p: "¿Cuál es la factorización del polinomio x² - 2x - 15?", o: ["(x+5)(x-3)", "(x-2)(x-15)", "(x-5)(x+3)", "(x+2)(x-15)"], r: "(x-5)(x+3)" },
-            { p: "¿Cuál es la solución de 4(x - 3) < 2x - 2?", o: ["x < 1", "x < 5", "x < 6", "x < 7"], r: "x < 5" },
-            { p: "El perímetro de un cuadrado es 100 m. ¿Cuántos metros mide cada uno de sus lados?", o: ["10", "20", "25", "50"], r: "25" },
-            { p: "Una caja rectangular tiene fondo cuadrado con lados de 3 cm y una altura de 8 cm. ¿Cuál es su volumen en cm³?", o: ["14", "24", "48", "72"], r: "72" },
+            { p: "¿Cuál es la solución de la inecuación: 4(x - 3) < 2x - 2?", o: ["x < 1", "x < 5", "x < 6", "x < 7"], r: "x < 5" },
+            { p: "El perímetro de un cuadrado es 100 metros. ¿Cuántos metros mide cada uno de sus lados?", o: ["10", "20", "25", "50"], r: "25" },
+            { p: "Una caja rectangular tiene fondo cuadrado con lados de 3 cm y una altura de 8 cm. ¿Cuál es su volumen en centímetros cúbicos?", o: ["14", "24", "48", "72"], r: "72" },
             { p: "Las manecillas de un reloj apuntan justamente al 3 y al 12. ¿Cuántos grados mide el ángulo formado?", o: ["30°", "45°", "60°", "90°"], r: "90°" },
-            { p: "Un círculo tiene un radio de 1.5 cm. Halle la medida aproximada de su circunferencia (Use π ≈ 3.14).", o: ["2.25 cm", "3.00 cm", "7.07 cm", "9.42 cm"], r: "9.42 cm" },
+            { p: "Un círculo tiene un radio de 1.5 centímetros. Halle la medida aproximada de su circunferencia (Use π ≈ 3.14).", o: ["2.25 cm", "3.00 cm", "7.07 cm", "9.42 cm"], r: "9.42 cm" },
             { p: "¿Cuál es el promedio, en grados, de los ángulos internos de cualquier triángulo?", o: ["30°", "60°", "90°", "180°"], r: "60°" },
-            { p: "Si la longitud de un rectángulo aumenta un 20% y su ancho aumenta un 60%, ¿de cuánto es el aumento en el área?", o: ["40%", "80%", "92%", "120%"], r: "92%" },
+            { p: "Si la longitud de un rectángulo aumenta un 20% y su ancho aumenta un 60%, ¿de cuánto es el aumento en el área del rectángulo?", o: ["40%", "80%", "92%", "120%"], r: "92%" },
             { p: "¿Cuál de los siguientes sólidos puede tener una base triangular?", o: ["Cono", "Cubo", "Paralelepípedo", "Prisma"], r: "Prisma" },
             { p: "Si el promedio (media aritmética) del conjunto de datos: 4, m, 6, 10 es 7, ¿cuál es el valor de m?", o: ["2", "4", "7", "8"], r: "8" },
-            { p: "En una reunión hay 50 personas, de las cuales 12 son niños. ¿Cuál es la probabilidad de que lo gane un NO niño?", o: ["0.12", "0.24", "0.76", "0.88"], r: "0.76" },
-            { p: "Isaac tiene igual cantidad de libros de drama, historia y arte. Si tiene 6 de detectives y 3 de ficción (que son la otra mitad), ¿cuántos tiene de historia?", o: ["3", "6", "9", "12"], r: "9" },
-            { p: "En un grupo de 16 personas, 8 leyeron un libro, 5 vieron la película y 2 hicieron ambas cosas. ¿Probabilidad de elegir alguien que no hizo ninguna?", o: ["1/16", "2/16", "5/16", "11/16"], r: "5/16" }
+            { p: "En una reunión hay 50 personas, de las cuales 12 son niños. ¿Cuál es la probabilidad de que, al rifar un regalo, NO lo gane un niño?", o: ["0.12", "0.24", "0.76", "0.88"], r: "0.76" },
+            { p: "Isaac tiene la misma cantidad de libros de drama, historia y arte. Si tiene 6 de detectives y 3 de ficción (que juntos completan la otra mitad de su colección), ¿cuántos libros de historia tiene?", o: ["3", "6", "9", "12"], r: "9" },
+            { p: "En un grupo de 16 personas, 8 leyeron un libro, 5 vieron la película y 2 de las personas que leyeron el libro también vieron la película. ¿Cuál es la probabilidad de seleccionar al azar una persona que NO haya leído el libro y que TAMPOCO haya visto la película?", o: ["1/16", "2/16", "5/16", "11/16"], r: "5/16" },
+            { p: "¿Cuál es el valor de x en la ecuación: 3x + 5 = 20?", o: ["3", "4", "5", "6"], r: "5" },
+            { p: "Si se lanza un dado honesto de 6 caras, ¿cuál es la probabilidad de obtener un número primo?", o: ["1/6", "1/3", "1/2", "2/3"], r: "1/2" },
+            { p: "En un triángulo rectángulo, los catetos miden 3 cm y 4 cm. ¿Cuánto mide la hipotenusa?", o: ["5 cm", "6 cm", "7 cm", "25 cm"], r: "5 cm" },
+            { p: "Simplifique la siguiente expresión algebraica: 3x + 4y - 2x + 5y", o: ["x + 9y", "5x + 9y", "x - y", "x + y"], r: "x + 9y" },
+            { p: "Si el área de un círculo es 16π cm², ¿cuánto mide su radio?", o: ["2 cm", "4 cm", "8 cm", "16 cm"], r: "4 cm" },
+            { p: "¿Cuál es el resultado de resolver: (2³ * 2²)?", o: ["16", "32", "64", "128"], r: "32" },
+            { p: "Un artículo que cuesta $200 tiene un descuento del 15%. ¿Cuánto se pagará por él?", o: ["$150", "$170", "$180", "$185"], r: "$170" },
+            { p: "Si 3 obreros tardan 6 horas en pintar una barda, ¿cuántas horas tardarán 6 obreros en hacer el mismo trabajo bajo las mismas condiciones?", o: ["3 horas", "12 horas", "2 horas", "4 horas"], r: "3 horas" },
+            { p: "¿Cuál es la pendiente de la recta con ecuación y = -2x + 4?", o: ["4", "2", "-2", "1/2"], r: "-2" },
+            { p: "Si el volumen de un cubo es 27 cm³, ¿cuánto mide el perímetro de una de sus caras?", o: ["3 cm", "9 cm", "12 cm", "27 cm"], r: "12 cm" },
+            { p: "¿Cuál es el resultado de la operación: 5 + 3 * 2 - 4?", o: ["12", "7", "8", "11"], r: "7" },
+            { p: "La suma de dos números consecutivos es 35. ¿Cuál es el número mayor?", o: ["17", "18", "19", "20"], r: "18" },
+            { p: "En una bolsa hay 4 canicas rojas, 3 azules y 5 verdes. Si se saca una canica al azar, ¿cuál es la probabilidad de que sea azul?", o: ["1/4", "1/3", "3/5", "5/12"], r: "1/4" },
+            { p: "Carlos hizo un pictograma de los carros que pasaron por su casa. Si cada dibujo de carro representa 20 unidades, ¿cuántos carros representan 4 dibujos completos y medio dibujo?", o: ["70", "80", "90", "100"], r: "90" },
+            { p: "Si log x = 2 en base 10, ¿cuál es el valor de x?", o: ["2", "10", "20", "100"], r: "100" }
         ];
 
         let examenAlumno = [];
@@ -93,14 +109,14 @@
             document.getElementById('registro').style.display = 'none';
             document.getElementById('cuestionario').style.display = 'block';
             
-            // Selecciona 10 preguntas al azar
+            // 1. MEZCLA LAS 35 PREGUNTAS Y SELECCIONA SOLO 10 AL AZAR
             examenAlumno = bancoREALEZA.sort(() => 0.5 - Math.random()).slice(0, 10);
             
             const lista = document.getElementById('lista-preguntas');
             lista.innerHTML = "";
             
             examenAlumno.forEach((item, index) => {
-                // Mezcla las opciones de respuesta de cada pregunta
+                // 2. MEZCLA LAS OPCIONES DE RESPUESTA PARA ESTE ALUMNO
                 let opcionesMezcladas = [...item.o].sort(() => 0.5 - Math.random());
                 
                 let opcionesHTML = opcionesMezcladas.map(opt => 
@@ -113,6 +129,7 @@
                         ${opcionesHTML}
                     </div>`;
             });
+            window.scrollTo(0,0);
         }
 
         async function enviarExamen() {
@@ -134,14 +151,13 @@
                 return alert("Por favor, contesta todas las preguntas antes de enviar.");
             }
 
-            // Guardamos el nombre antes de limpiar la pantalla
             const nombreAlumno = document.getElementById('nombre').value.trim();
             const totalPreguntas = examenAlumno.length;
 
             document.getElementById('cuestionario').style.display = 'none';
             const contenedorResultado = document.getElementById('resultado');
             contenedorResultado.style.display = 'block';
-            contenedorResultado.innerHTML = '<span class="loading">Enviando resultados al profesor...</span>';
+            contenedorResultado.innerHTML = '<span class="loading">Guardando tus respuestas en el sistema, por favor espera...</span>';
 
             const datosEnvio = {
                 nombre: nombreAlumno,
@@ -159,7 +175,7 @@
                     body: JSON.stringify(datosEnvio)
                 });
                 
-                // Mensaje final personalizado para el alumno
+                // Pantalla final con los datos del alumno y su calificación
                 contenedorResultado.innerHTML = `
                     <div style="padding: 20px; border: 2px solid #27ae60; border-radius: 10px; background-color: #fafffa;">
                         <h3 style="color: #27ae60; margin-top: 0;">¡Examen Finalizado!</h3>
@@ -175,6 +191,7 @@
                     <p>Tu puntuación fue: ${aciertos} / ${totalPreguntas}</p>
                     <p>Por favor, toma captura de pantalla para validar tu calificación con el profesor.</p>`;
             }
+            window.scrollTo(0,0);
         }
     </script>
 </body>
