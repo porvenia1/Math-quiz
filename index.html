@@ -134,16 +134,20 @@
                 return alert("Por favor, contesta todas las preguntas antes de enviar.");
             }
 
+            // Guardamos el nombre antes de limpiar la pantalla
+            const nombreAlumno = document.getElementById('nombre').value.trim();
+            const totalPreguntas = examenAlumno.length;
+
             document.getElementById('cuestionario').style.display = 'none';
             const contenedorResultado = document.getElementById('resultado');
             contenedorResultado.style.display = 'block';
-            contenedorResultado.innerHTML = '<span class="loading">Guardando tus respuestas en el sistema, por favor espera...</span>';
+            contenedorResultado.innerHTML = '<span class="loading">Enviando resultados al profesor...</span>';
 
             const datosEnvio = {
-                nombre: document.getElementById('nombre').value.trim(),
+                nombre: nombreAlumno,
                 grupo: document.getElementById('grupo').value.trim().toUpperCase(),
                 turno: document.getElementById('turno').value,
-                puntos: aciertos + " de " + examenAlumno.length
+                puntos: aciertos + " de " + totalPreguntas
             };
 
             try {
@@ -155,14 +159,21 @@
                     body: JSON.stringify(datosEnvio)
                 });
                 
+                // Mensaje final personalizado para el alumno
                 contenedorResultado.innerHTML = `
-                    <span style="color: #27ae60;">¡Examen enviado correctamente!</span><br><br>
-                    Tu esfuerzo ha sido registrado.<br>
-                    Puedes cerrar esta página de manera segura.`;
+                    <div style="padding: 20px; border: 2px solid #27ae60; border-radius: 10px; background-color: #fafffa;">
+                        <h3 style="color: #27ae60; margin-top: 0;">¡Examen Finalizado!</h3>
+                        <p style="font-size: 1.1em;">Buen trabajo, <strong>${nombreAlumno}</strong>.</p>
+                        <p style="font-size: 1.2em;">Tu calificación es: <span style="color: #2c3e50; font-weight: bold;">${aciertos} / ${totalPreguntas}</span></p>
+                        <hr style="border: 0; border-top: 1px solid #eee;">
+                        <p style="font-size: 0.9em; color: #666;">Los resultados se han guardado automáticamente en el registro del profesor.</p>
+                    </div>`;
             } catch (error) {
                 contenedorResultado.innerHTML = `
-                    <span style="color: #e74c3c;">Hubo un problema al enviar.</span><br><br>
-                    Por favor, toma una captura de pantalla a tus respuestas y avísale al profesor.`;
+                    <p style="color: #e74c3c; font-weight: bold;">Error al conectar con el servidor.</p>
+                    <p>Alumno: ${nombreAlumno}</p>
+                    <p>Tu puntuación fue: ${aciertos} / ${totalPreguntas}</p>
+                    <p>Por favor, toma captura de pantalla para validar tu calificación con el profesor.</p>`;
             }
         }
     </script>
